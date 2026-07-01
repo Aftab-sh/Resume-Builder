@@ -40,10 +40,12 @@ public class AuthService {
         this.jwtUtil = jwtUtil;
     }
 
-    public AuthResponse register(RegisterRequest request) {
+    public AuthResponse register(RegisterRequest request) 
+    {
         log.info("Inside AuthService register() for email: {}", request.getEmail());
         
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail()))
+        {
             throw new ResourceExistsException("User already exists with this email");
         }
         
