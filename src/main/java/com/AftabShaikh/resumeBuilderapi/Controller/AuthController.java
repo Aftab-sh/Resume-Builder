@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.AftabShaikh.resumeBuilderapi.Util.AppConstants;
 import com.AftabShaikh.resumeBuilderapi.Util.JwtUtil;
 
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174"}) // React Ports configured
+@CrossOrigin(origins = {"https://resume-builder-frontent-31bbar63g-aftab-projects1.vercel.app","http://localhost:5173", "http://localhost:5174"}) // React Ports configured
 @RestController 
 @RequestMapping("/api/auth") 
 @Slf4j

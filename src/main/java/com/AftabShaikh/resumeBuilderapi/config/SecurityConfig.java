@@ -112,18 +112,17 @@ public class SecurityConfig
 
     // 3. CORS Configuration: React (Localhost 5173) se backend ko connect karne ke liye
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() 
-    {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // DONO ports ko ek saath allow karo (5173 aur 5174)
-        configuration.setAllowedOrigins(Arrays.asList("https://resume-builder-frontent-31bbar63g-aftab-projects1.vercel.app","http://localhost:5173", "http://localhost:5174"));
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+            "https://*.vercel.app",
+            "http://localhost:5173",
+            "http://localhost:5174"
+        ));
         
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        
-        // Ye line bahut zaruri hai headers allow karne ke liye
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
-        
+        configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
