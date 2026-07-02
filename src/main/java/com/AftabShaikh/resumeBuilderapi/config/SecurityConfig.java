@@ -117,7 +117,7 @@ public class SecurityConfig
         CorsConfiguration configuration = new CorsConfiguration();
         
         // DONO ports ko ek saath allow karo (5173 aur 5174)
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:5174"));
+        configuration.setAllowedOrigins(Arrays.asList("https://resume-builder-frontent-31bbar63g-aftab-projects1.vercel.app","http://localhost:5173", "http://localhost:5174"));
         
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         
