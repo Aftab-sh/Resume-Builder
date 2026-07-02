@@ -39,25 +39,54 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
-
-    public AuthResponse register(RegisterRequest request) 
-    {
+    
+    
+    
+    public AuthResponse register(RegisterRequest request) {
         log.info("Inside AuthService register() for email: {}", request.getEmail());
-        
-        if (userRepository.existsByEmail(request.getEmail()))
-        {
+
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new ResourceExistsException("User already exists with this email");
         }
-        
+
         User newUser = toEntity(request);
         User savedUser = userRepository.save(newUser);
-        
-        log.info("send email in registation ");
-        sendVerificationEmail(savedUser); 
-        log.info("successfully send email ");
-        
+
+        // Email async send karo — fail hone pe registration block nahi hogi
+        try {
+            sendVerificationEmail(savedUser);
+            log.info("Verification email sent successfully");
+        } catch (Exception e) {
+            log.warn("Email send failed (non-blocking): {}", e.getMessage());
+        }
+
         return toResponse(savedUser);
     }
+    
+    
+
+//    public AuthResponse register(RegisterRequest request) 
+//    {
+//        log.info("Inside AuthService register() for email: {}", request.getEmail());
+//        
+//        if (userRepository.existsByEmail(request.getEmail()))
+//        {
+//            throw new ResourceExistsException("User already exists with this email");
+//        }
+//        
+//        User newUser = toEntity(request);
+//        User savedUser = userRepository.save(newUser);
+//        
+//        log.info("send email in registation ");
+//        sendVerificationEmail(savedUser); 
+//        log.info("successfully send email ");
+//        
+//        return toResponse(savedUser);
+//    }
+    
+    
+    
+    
 
     private void sendVerificationEmail(User user) {
         log.info("inside AuthService - sendVerificationEmail(): {}", user); 
@@ -107,9 +136,14 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setProfileImageUrl(request.getProfileImageUrl());
         user.setSubscriptionPlan("Basic");
-        user.setEmailVerified(false);
-        user.setVerificationToken(UUID.randomUUID().toString());
-        user.setVerificationExpires(LocalDateTime.now().plusHours(24));
+//        user.setEmailVerified(false);
+//        user.setVerificationToken(UUID.randomUUID().toString());
+//        user.setVerificationExpires(LocalDateTime.now().plusHours(24));
+        
+        user.setEmailVerified(true);
+        user.setVerificationToken(null);
+        user.setVerificationExpires(null);
+        
         
         // 🚀 FIXED 1: Registration par by-default USER role assign kiya
         user.setRole(Roles.USER); 
