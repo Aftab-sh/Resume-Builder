@@ -114,7 +114,8 @@ public class AuthService {
         }
     }
 
-    private AuthResponse toResponse(User user) {
+    private AuthResponse toResponse(User user)
+    {
         AuthResponse response = new AuthResponse();
         response.setId(user.getId()); 
         response.setName(user.getName());
@@ -136,21 +137,16 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setProfileImageUrl(request.getProfileImageUrl());
         user.setSubscriptionPlan("Basic");
-//        user.setEmailVerified(false);
-//        user.setVerificationToken(UUID.randomUUID().toString());
-//        user.setVerificationExpires(LocalDateTime.now().plusHours(24));
         
-        user.setEmailVerified(true);
-        user.setVerificationToken(null);
-        user.setVerificationExpires(null);
-        
+        user.setEmailVerified(false);
+        user.setVerificationToken(UUID.randomUUID().toString());
+        user.setVerificationExpires(LocalDateTime.now().plusHours(24));
         
         // 🚀 FIXED 1: Registration par by-default USER role assign kiya
         user.setRole(Roles.USER); 
         
         return user; 
     }
-    
     public void verifyEmail(String token) {
         log.info("Inside authService: verifyEmail(): {}", token);
         User user = userRepository.findByVerificationToken(token)
@@ -165,7 +161,8 @@ public class AuthService {
     }
 
     // 🚀 FIXED 2: Dynamic Roles packing for Shared Login Page
-    public AuthResponse login(LoginRequest request) {
+    public AuthResponse login(LoginRequest request)
+    {
         User existingUser = userRepository.findByEmail(request.getEmail());
         if (existingUser == null) {
             throw new UsernameNotFoundException("Invalid email or password");
